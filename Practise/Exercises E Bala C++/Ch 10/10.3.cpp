@@ -1,4 +1,5 @@
 #include<iostream>
+#include<fstream>
 #include<iomanip>
 using namespace std;
 int main()
@@ -6,6 +7,7 @@ int main()
     char str[80];
     int lines=0,ch=0,words=0;
     char c;
+    ofstream fout("Paragraph.txt");
     cout<<"Enter paragraph(~)to end  :- "<<endl<<"Line(1)->";
     while((c=cin.get())!='~')
     {
@@ -18,7 +20,9 @@ int main()
         }
         else if(c!='~')
             ++ch;
+        fout<<c;
     }
+    fout.close();
     if(ch)
        ++words,++lines;
     cout<<endl<<setiosflags(ios::left);
