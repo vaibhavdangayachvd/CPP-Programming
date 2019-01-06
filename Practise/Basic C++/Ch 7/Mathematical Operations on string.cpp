@@ -3,13 +3,13 @@
 using namespace std;
 class strings
 {
-    public:
-    char *str;
+    char*str;
     int len;
-
+public:
     strings(){len=0,str=0;}
     strings(const char *s);
     strings(const strings &s);
+    void operator=(const strings &s);
     ~strings(){delete str;}
     friend strings operator+(const strings &a,const strings &b);
     friend istream& operator>>(istream &din,strings &s);
@@ -27,7 +27,13 @@ strings::strings(const strings &s)
     str=new char[len+1];
     strcpy(str,s.str);
 }
-strings operator+(strings &a,strings &b)
+void strings::operator=(const strings &s)
+{
+    len=s.len;
+    str=new char[len+1];
+    strcpy(str,s.str);
+}
+strings operator+(const strings &a,const strings &b)
 {
     strings temp;
     temp.len=(a.len+b.len+1);
@@ -54,7 +60,8 @@ ostream& operator<<(ostream &dout,strings &s)
 }
 int main()
 {
-    strings first="Vaibhav",last="Dangayach",full=first+last;
+    strings first="Vaibhav",last="Dangayach",full;
+    full=first+last;
     cout<<full<<endl;
     return 0;
 }
