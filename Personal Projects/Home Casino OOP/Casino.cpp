@@ -231,6 +231,7 @@ void user::login(void)
     cin>>usr;
     if(!strcmp(usr,temp.password))
     {
+        temp.add_coins(25);
         temp.show_user_menu();
         commit_to_userfile(temp);
     }
