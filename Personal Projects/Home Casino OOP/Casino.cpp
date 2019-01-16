@@ -11,7 +11,26 @@ void hold(void)
     cout<<"\n\n\tPress Enter to continue...";
     getch();
 }
-//Person Base Class for basic details of admins and users
+//Securely read password in an array
+void get_password(char *ch)
+{
+    char c;
+    int i=0;
+    while((c=getch())!=13)
+    {
+        if(c==8)
+        {
+            if(i!=0)
+                --i;
+            continue;
+        }
+        else
+            ch[i++]=c;
+    }
+    ch[i]='\0';
+    cout<<endl;
+}
+//Person Base Class for basic details of Administrators and Users
 class person
 {
 protected:
@@ -35,7 +54,7 @@ void person::read_basic_details(void)
     {
         cout<<"Choose Gender(m=Male,f=female,o=others) : ";
         cin>>gender;
-        if(gender!='m' && gender!='f' && gender!='o')
+        if(gender!='m' && gender!='f' && gender!='o')//Only accept 3 char values(m,o,f)
             cout<<"Wrong Choice !! Try again !!\n";
     }while(gender!='m' && gender!='f' && gender!='o');
 }
@@ -80,10 +99,13 @@ void user::create_new_user(void)
     char str[30],pw[30];
     user temp;
     int found=0;
+    //Check if user name already exist
     do
     {
-        cout<<"Enter Username : ";
+        cout<<"Enter Username(type exit to go back): ";
         cin>>str;
+        if(!strcmp(str,"exit"))
+            return;
         ifstream fin;
         fin.open("userdata",ios::binary);
         while(fin.read((char*)&temp,sizeof(user)))
@@ -99,29 +121,32 @@ void user::create_new_user(void)
         fin.close();
     }while(found);
     strcpy(username,str);
+    //Read Password
     do
     {
         cout<<"Enter Password : ";
-        cin>>str;
+        get_password(str);
         cout<<"Re-Enter Password : ";
-        cin>>pw;
+        get_password(pw);
         if(strcmp(str,pw))
             cout<<"Passwords do not match !! Try Again\n";
     }while(strcmp(str,pw));
     strcpy(password,pw);
-    ofstream fout("userdata",ios::app|ios::binary);
+    //Copy data into temp
     strcpy(temp.fname,fname);
     strcpy(temp.lname,lname);
     temp.age=age;
     temp.gender=gender;
-    temp.coin_balance=500;
+    temp.coin_balance=500;//Set initial coin balance 500
     strcpy(temp.username,username);
     strcpy(temp.password,password);
+    //write temp into file
+    ofstream fout("userdata",ios::app|ios::binary);
     fout.write((char*)&temp,sizeof(user));
     fout.close();
     cout<<"\nUser Successfully Created !!";
 }
-void user::show_creds(void)
+void user::show_creds(void)//Show credentials
 {
     cout<<"Username : "<<username<<endl;
     cout<<"Password : "<<password<<endl;
@@ -159,7 +184,7 @@ void user::change_password(void)
 {
     char pw[20],pwr[20];
     cout<<"Enter Current Password : ";
-    cin>>pw;
+    get_password(pw);
     if(strcmp(password,pw))
     {
         cout<<"\nWrong Password !!";
@@ -168,15 +193,16 @@ void user::change_password(void)
     do
     {
         cout<<"Enter New Password : ";
-        cin>>pw;
+        get_password(pw);
         cout<<"Re-Enter New Password : ";
-        cin>>pwr;
+        get_password(pwr);
         if(strcmp(pw,pwr))
             cout<<"Passwords do not match !! Try Again\n";
     }while(strcmp(pw,pwr));
     strcpy(password,pwr);
     cout<<"\nNew Password Set !!";
 }
+//Read The File until the user name is found else throw int exception
 user user::get_user_by_username(const char *str)
 {
     user temp;
@@ -192,6 +218,7 @@ user user::get_user_by_username(const char *str)
     fin.close();
     throw 0;
 }
+//Count the users and update the file
 void user::commit_to_userfile(const user &u)
 {
     user temp;
@@ -228,12 +255,13 @@ void user::login(void)
         return;
     }
     cout<<"Enter Password : ";
-    cin>>usr;
+    get_password(usr);
+    //If login Successful
     if(!strcmp(usr,temp.password))
     {
-        temp.add_coins(25);
-        temp.show_user_menu();
-        commit_to_userfile(temp);
+        temp.add_coins(25);//Give 25 bonus coins
+        temp.show_user_menu();//Open User Panel
+        commit_to_userfile(temp);//Commit Updates to file after logout
     }
     else
     {
@@ -249,7 +277,7 @@ void user::show_user_menu(void)
         system("cls");
         cout<<"\t\tWelcome to User Menu !!\n\n";
         cout<<"Choose Option :-\n\n";
-        cout<<"1 - Open Casino\n2 - Show Personal Details\n3 - Change Password\n\tBackspace - Exit\n";
+        cout<<"1 - Open Casino\n2 - Show Personal Details\n3 - Update Basic Details\n4 - Change Password\n\tBackspace - Logout\n";
         option=getch();
         system("cls");
         switch(option)
@@ -262,6 +290,11 @@ void user::show_user_menu(void)
             hold();
             break;
         case '3':
+            read_basic_details();
+            cout<<"\nDetails Updated !!";
+            hold();
+            break;
+        case '4':
             change_password();
             hold();
             break;
@@ -295,7 +328,7 @@ void admin::change_password(void)
 {
     char pw[20],pwr[20];
     cout<<"Enter Current Password : ";
-    cin>>pw;
+    get_password(pw);
     if(strcmp(password,pw))
     {
         cout<<"\nWrong Password !!";
@@ -304,9 +337,9 @@ void admin::change_password(void)
     do
     {
         cout<<"Enter New Password : ";
-        cin>>pw;
+        get_password(pw);
         cout<<"Re-Enter New Password : ";
-        cin>>pwr;
+        get_password(pwr);
         if(strcmp(pw,pwr))
             cout<<"Passwords do not match !! Try Again\n";
     }while(strcmp(pw,pwr));
@@ -349,7 +382,7 @@ void admin::login(void)
         return;
     }
     cout<<"Enter Password : ";
-    cin>>usr;
+    get_password(usr);
     if(!strcmp(usr,temp.password))
     {
         temp.show_admin_menu();
@@ -408,7 +441,7 @@ void admin::show_admin_menu(void)
         system("cls");
         cout<<"\t\tWelcome To Your Admin Menu !!\n\n";
         cout<<"Choose Option :-\n\n";
-        cout<<"1 - Give Coins\n2 - Change Password\n3 - Show Personal Details\n4 - List All Users\n\tBackspace - Exit\n";
+        cout<<"1 - Give Coins\n2 - Change Password\n3 - Show Personal Details\n4 - Update Basic Details\n5 - List All Users\n\tBackspace - Logout/Back\n";
         option=getch();
         system("cls");
         switch(option)
@@ -426,6 +459,11 @@ void admin::show_admin_menu(void)
             hold();
             break;
         case '4':
+            read_basic_details();
+            cout<<"\nDetails Updated !!";
+            hold();
+            break;
+        case '5':
             show_all_users();
             hold();
             break;
@@ -509,9 +547,9 @@ void super::create_new_admin(void)
     do
     {
         cout<<"Enter Password : ";
-        cin>>str;
+        get_password(str);
         cout<<"Re-Enter Password : ";
-        cin>>pw;
+        get_password(pw);
         if(strcmp(str,pw))
             cout<<"Passwords do not match !! Try Again\n";
     }while(strcmp(str,pw));
@@ -558,6 +596,14 @@ void super::reset_casino(void)
     char option=getch();
     if(option==8)
         return;
+    char pw[20];
+    cout<<"Enter Password to continue : ";
+    get_password(pw);
+    if(strcmp(pw,password))
+    {
+        cout<<"\nIncorrect Password !!";
+        return;
+    }
     ofstream fout;
     fout.open("userdata",ios::binary);
     fout.close();
@@ -622,7 +668,7 @@ void super::login(void)
         return;
     }
     cout<<"Enter Password : ";
-    cin>>usr;
+    get_password(usr);
     if(!strcmp(usr,temp.password))
     {
         temp.show_super_menu();
@@ -642,7 +688,7 @@ void super::show_super_menu(void)
         system("cls");
         cout<<"\t\tWelcome To Super Admin Menu !!\n\n";
         cout<<"Choose Option:-\n\n";
-        cout<<"1 - Show Basic Admin Menu\n2 - Add New Admin\n3 - List All Admins\n4 - Reset Casino\n\tBackspace - Exit\n";
+        cout<<"1 - Show Basic Admin Menu\n2 - Add New Admin\n3 - List All Admins\n4 - Reset Casino\n\tBackspace - Logout\n";
         option=getch();
         system("cls");
         switch(option)
