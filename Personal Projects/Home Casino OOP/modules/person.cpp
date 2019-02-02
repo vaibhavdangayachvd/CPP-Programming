@@ -1,15 +1,4 @@
-using namespace std;
-class person
-{
-protected:
-    char fname[30];
-    char lname[30];
-    int age;
-    char gender;
-public:
-    void read_basic_details(void);
-    void show_basic_details(void)const;
-};
+#include "..\\headers\\person.h"
 void person::read_basic_details(void)
 {
     cout<<"Enter First Name : ";

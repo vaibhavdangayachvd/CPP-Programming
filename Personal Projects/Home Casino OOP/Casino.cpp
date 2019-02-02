@@ -3,15 +3,17 @@
 #include<fstream>
 #include<cstdlib>
 #include<cstring>
+#include<ctime>
 #include<conio.h>
 #include<direct.h>
-//Include Modules
-#include "modules\\extras.h"
-#include "modules\\person.h"
-#include "modules\\user.h"
-#include "modules\\admin.h"
-#include "modules\\super.h"
 using namespace std;
+//Include Modules
+#include "modules\\extras.cpp"
+#include "modules\\person.cpp"
+#include "modules\\game.cpp"
+#include "modules\\user.cpp"
+#include "modules\\admin.cpp"
+#include "modules\\super.cpp"
 int main()
 {
     mkdir("database");

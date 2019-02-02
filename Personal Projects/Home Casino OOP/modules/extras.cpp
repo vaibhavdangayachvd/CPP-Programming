@@ -1,4 +1,4 @@
-using namespace std;
+#include "..\\headers\\extras.h"
 //Hold Screen Message
 void hold(void)
 {
@@ -33,7 +33,7 @@ void get_password(char *ch)
             cout<<ch[i++];//Display current character and increment i
         }
     }
-    cout<<"\b*";//After enter is pressed remove last read character 
+    cout<<"\b*";//After enter is pressed remove last read character
     ch[i]='\0';//Make it String
     cout<<endl;
 }

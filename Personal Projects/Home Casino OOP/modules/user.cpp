@@ -1,24 +1,4 @@
-using namespace std;
-class user:public person
-{
-    int coin_balance;
-    char username[30];
-    char password[30];
-public:
-    user();
-    void create_new_user(void);
-	void show_user_menu(void);
-    void add_coins(int coins);
-    void change_password(void);
-    void update_basic_details();
-    void show_credentials(void)const;
-    void show_coin_balance(void)const;
-    static void show_all_users(void);
-	static user get_user_by_username(const char *);
-    static user login(void);
-    static void show_user_by_name(void);
-    static void commit_to_userfile(const user &a);
-};
+#include "..\\headers\\user.h"
 user::user()
 {
     ifstream fin;
@@ -96,6 +76,38 @@ void user::add_coins(int coins)
 {
 	coin_balance+=coins;
 }
+void user::take_coins(int coins)
+{
+    if(coins>coin_balance)
+    {
+        cout<<"Not enough Coins !!";
+        return;
+    }
+    coin_balance-=coins;
+}
+int user::set_bet(void)const
+{
+    int bet;
+    do
+    {
+        cout<<"\nEnter Bet amount >= 50 (character to exit) : ";
+        cin>>bet;
+        if(cin.fail())
+        {
+            cout<<"\nThanks for Playing !!";
+            cin.clear();
+            cin.sync();
+            hold();
+            throw false;
+        }
+        if(bet<50 || bet>coin_balance)
+            cout<<"Wrong Amount !!\n";
+    }
+    while(bet<50 || bet>coin_balance);
+    cout<<"Bet Set !!\n\n";
+    //cin.sync();
+    return bet;
+}
 //Update password
 void user::change_password(void)
 {
@@ -155,6 +167,10 @@ void user::show_credentials(void) const
     cout<<"Username : "<<username<<endl;
     cout<<"Password : "<<password<<endl;
 }
+int user::get_coin_balance(void)const
+{
+    return coin_balance;
+}
 //Display Coin Balance
 void user::show_coin_balance(void)const
 {
@@ -200,7 +216,7 @@ user user::login(void)
 {
     char usr[20];
     user temp;
-    cout<<"\t\tWelcome To User Login Panel !!\n\n";
+    cout<<"\t\tWelcogameme To User Login Panel !!\n\n";
     cout<<"Enter Username : ";
     cin>>usr;
     try
@@ -229,6 +245,79 @@ user user::login(void)
         throw false;
     }
 }
+void user::show_casino_menu(void)
+{
+    while(1)
+    {
+        system("cls");
+        cout<<"\t\tWelcome to Casino !! Here you can play !!\n\n";
+        cout<<"Choose Option:-\n\n";
+        cout<<"1 - Head Tail\n2 - Stone Paper Scissor\n3 - 7Up7Down\n\tBackspace - Exit\n";
+        char option=getch();
+        int bet;
+        system("cls");
+        switch(option)
+        {
+    case '1':
+            show_head_tail_rules();
+            while(1)
+            {
+                show_coin_balance();
+                try
+                {
+                    bet=set_bet();
+                }
+                catch(bool)
+                {
+                    break;
+                }
+                if(play_head_tail())
+                    add_coins(bet);
+                else
+                    take_coins(bet);
+                commit_to_userfile(*this);
+                hold();
+                system("cls");
+            }
+            break;
+    case '2':
+            /*show_stone_paper_rules();
+            jump:
+            try
+            {
+                bet=set_bet()
+            }
+            catch(bool)
+            {
+                break;
+            }
+            if(play_stone_paper())
+                user.add_coins(bet*2);
+            else
+                user.take_coins(bet);
+            commit_to_userfile(*this);*/
+            break;
+    case '3':
+            /*show_7up7down_rules();
+            try
+            {
+                bet=set_bet()
+            }
+            catch(bool)
+            {
+                break;
+            }
+            if(play_7up7down())
+                user.add_coins(bet);
+            else
+                user.take_coins(bet);
+            commit_to_userfile(*this);*/
+            break;
+        case 8:
+            return;
+        }
+    }
+}
 void user::show_user_menu(void)
 {
     char option;
@@ -243,6 +332,7 @@ void user::show_user_menu(void)
         switch(option)
         {
         case '1':
+            show_casino_menu();
             break;
         case '2':
             show_basic_details();
