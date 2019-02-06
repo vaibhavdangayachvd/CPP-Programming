@@ -1,19 +1,17 @@
 //Include Header Files
 #include<iostream>
-#include<fstream>
 #include<cstdlib>
-#include<cstring>
-#include<ctime>
 #include<conio.h>
 #include<direct.h>
 using namespace std;
 //Include Modules
 #include "modules\\extras.cpp"
 #include "modules\\person.cpp"
-#include "modules\\game.cpp"
 #include "modules\\user.cpp"
 #include "modules\\admin.cpp"
 #include "modules\\super.cpp"
+#include "modules\\game_menu.cpp"
+#include "modules\\head_tail.cpp"
 int main()
 {
     mkdir("database");

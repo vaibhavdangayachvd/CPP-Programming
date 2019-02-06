@@ -1,7 +1,7 @@
 #include<iostream>
 #include "test.h"
 using namespace std;
-int a=10;
+extern const int a=10;
 int main()
 {
     test();

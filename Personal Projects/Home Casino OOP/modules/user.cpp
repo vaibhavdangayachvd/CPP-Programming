@@ -1,4 +1,12 @@
+#include<iostream>
+#include<cstdlib>
+#include<fstream>
+#include<cstring>
+#include<conio.h>
 #include "..\\headers\\user.h"
+#include "..\\headers\\game_menu.h"
+#include "..\\headers\\extras.h"
+using namespace std;
 user::user()
 {
     ifstream fin;
@@ -245,79 +253,6 @@ user user::login(void)
         throw false;
     }
 }
-void user::show_casino_menu(void)
-{
-    while(1)
-    {
-        system("cls");
-        cout<<"\t\tWelcome to Casino !! Here you can play !!\n\n";
-        cout<<"Choose Option:-\n\n";
-        cout<<"1 - Head Tail\n2 - Stone Paper Scissor\n3 - 7Up7Down\n\tBackspace - Exit\n";
-        char option=getch();
-        int bet;
-        system("cls");
-        switch(option)
-        {
-    case '1':
-            show_head_tail_rules();
-            while(1)
-            {
-                show_coin_balance();
-                try
-                {
-                    bet=set_bet();
-                }
-                catch(bool)
-                {
-                    break;
-                }
-                if(play_head_tail())
-                    add_coins(bet);
-                else
-                    take_coins(bet);
-                commit_to_userfile(*this);
-                hold();
-                system("cls");
-            }
-            break;
-    case '2':
-            /*show_stone_paper_rules();
-            jump:
-            try
-            {
-                bet=set_bet()
-            }
-            catch(bool)
-            {
-                break;
-            }
-            if(play_stone_paper())
-                user.add_coins(bet*2);
-            else
-                user.take_coins(bet);
-            commit_to_userfile(*this);*/
-            break;
-    case '3':
-            /*show_7up7down_rules();
-            try
-            {
-                bet=set_bet()
-            }
-            catch(bool)
-            {
-                break;
-            }
-            if(play_7up7down())
-                user.add_coins(bet);
-            else
-                user.take_coins(bet);
-            commit_to_userfile(*this);*/
-            break;
-        case 8:
-            return;
-        }
-    }
-}
 void user::show_user_menu(void)
 {
     char option;
@@ -332,7 +267,7 @@ void user::show_user_menu(void)
         switch(option)
         {
         case '1':
-            show_casino_menu();
+            show_game_menu(this);
             break;
         case '2':
             show_basic_details();

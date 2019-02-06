@@ -1,6 +1,7 @@
 #ifndef USER_H
 #define USER_H
-class user:public person,private game
+#include "person.h"
+class user:public person
 {
     int coin_balance;
     char username[30];
@@ -9,7 +10,6 @@ public:
     user();
     void create_new_user(void);
 	void show_user_menu(void);
-	void show_casino_menu(void);
     void add_coins(int coins);
     void take_coins(int coins);
     void change_password(void);

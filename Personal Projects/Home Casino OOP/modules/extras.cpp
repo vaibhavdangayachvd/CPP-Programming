@@ -1,4 +1,7 @@
+#include<iostream>
+#include<conio.h>
 #include "..\\headers\\extras.h"
+using namespace std;
 //Hold Screen Message
 void hold(void)
 {

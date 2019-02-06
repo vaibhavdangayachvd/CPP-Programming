@@ -1,4 +1,6 @@
+#include<iostream>
 #include "..\\headers\\person.h"
+using namespace std;
 void person::read_basic_details(void)
 {
     cout<<"Enter First Name : ";

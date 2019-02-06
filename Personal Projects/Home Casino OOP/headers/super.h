@@ -1,5 +1,6 @@
 #ifndef SUPER_H
 #define SUPER_h
+#include "admin.h"
 class super:public admin
 {
 public:

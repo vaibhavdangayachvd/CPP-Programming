@@ -1,5 +1,6 @@
 #ifndef ADMIN_H
 #define ADMIN_H
+#include "person.h"
 class admin:public person
 {
 protected:

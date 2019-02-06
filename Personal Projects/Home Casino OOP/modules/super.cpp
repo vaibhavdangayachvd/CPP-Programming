@@ -1,4 +1,11 @@
+#include<iostream>
+#include<fstream>
+#include<cstring>
+#include<cstdlib>
+#include<conio.h>
 #include "..\\headers\\super.h"
+#include "..\\headers\\extras.h"
+#include "..\\headers\\user.h"
 using namespace std;
 super::super()
 {

@@ -1,5 +1,5 @@
 using namespace std;
-extern int a;
+extern const int a=10;
 void test(void)
 {
 	cout<<a;

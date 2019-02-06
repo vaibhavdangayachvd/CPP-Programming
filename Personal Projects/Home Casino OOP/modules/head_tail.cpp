@@ -1,12 +1,18 @@
-#include "..\\headers\\game.h"
-void game::show_head_tail_rules(void)
+#include<iostream>
+#include<cstdlib>
+#include<conio.h>
+#include<ctime>
+#include "..\\headers\\head_tail.h"
+#include "..\\headers\\extras.h"
+using namespace std;
+void head_tail::show_rules(void)
 {
     cout<<"\n\n\t\tRules\n\n";
     cout<<"Choose a bet from 50 onwards. If you win , you get double the amount !!";
     hold();
     system("cls");
 }
-bool game::play_head_tail(void)
+bool head_tail::play(void)
 {
     cout<<"Choose :-\n\n1 - Head\n2 - Tail\n";
     int choice;
