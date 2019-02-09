@@ -93,6 +93,37 @@ void user::take_coins(int coins)
     }
     coin_balance-=coins;
 }
+void user::share_coins(void)
+{
+	show_coin_balance();
+	char str[30];
+	cout<<"\nEnter username of person to share coins : ";
+	cin>>str;
+	user temp;
+	try
+	{
+		temp=get_user_by_username(str);
+	}
+	catch(bool)
+	{
+		cout<<"\nUser Not Found !!";
+		return;
+	}
+	temp.show_basic_details();
+	int coins;
+	cout<<"\nEnter amount of coins to transfer : ";
+	cin>>coins;
+	if(get_coin_balance() < coins)
+	{
+		cout<<"\nNot Enough Balance !!";
+		return;
+	}
+	take_coins(coins);
+	temp.add_coins(coins);
+	commit_to_userfile(temp);
+	commit_to_userfile(*this);
+	cout<<"\nCoins Transferred !!";
+}
 int user::set_bet(void)const
 {
     int bet;
@@ -261,7 +292,7 @@ void user::show_user_menu(void)
         system("cls");
         cout<<"\t\tWelcome to User Menu !!\n\n";
         cout<<"Choose Option :-\n\n";
-        cout<<"1 - Open Casino\n2 - Show Personal Details\n3 - Update Basic Details\n4 - Change Password\n\tBackspace - Logout\n";
+        cout<<"1 - Open Casino\n2 - Share Coins\n3 - Show Personal Details\n4 - Update Basic Details\n5 - Change Password\n\tBackspace - Logout\n";
         option=getch();
         system("cls");
         switch(option)
@@ -269,16 +300,20 @@ void user::show_user_menu(void)
         case '1':
             show_game_menu(this);
             break;
-        case '2':
+		case '2':
+			share_coins();
+			hold();
+			break;
+        case '3':
             show_basic_details();
             show_coin_balance();
             hold();
             break;
-        case '3':
+        case '4':
             update_basic_details();
             hold();
             break;
-        case '4':
+        case '5':
             change_password();
             hold();
             break;

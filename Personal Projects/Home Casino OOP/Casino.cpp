@@ -12,6 +12,7 @@ using namespace std;
 #include "modules\\super.cpp"
 #include "modules\\game_menu.cpp"
 #include "modules\\head_tail.cpp"
+#include "modules\\up_down.cpp"
 int main()
 {
     mkdir("database");
